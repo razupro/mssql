@@ -1,0 +1,15 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: win-rootdisk
+  namespace: windows-vms
+spec:
+  storage:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 500Gi
+    storageClassName: ocs-storagecluster-ceph-rbd
+  source:
+    blank: {}
