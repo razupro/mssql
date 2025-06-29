@@ -1,0 +1,58 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: mssql-benchmark-template-pvc
+  namespace: windows-vms
+  labels:
+    template.kubevirt.io/type: base
+    workload.template.kubevirt.io/windows: 'true'
+objects:
+- apiVersion: kubevirt.io/v1
+  kind: VirtualMachine
+  metadata:
+    name: ${NAME}
+    namespace: ${NAMESPACE}
+    labels:
+      app: mssql-benchmark
+  spec:
+    running: false
+    template:
+      metadata:
+        labels:
+          kubevirt.io/domain: ${NAME}
+      spec:
+        domain:
+          cpu:
+            cores: 4
+            sockets: 1
+            threads: 1
+          devices:
+            disks:
+            - name: rootdisk
+              bootOrder: 1
+              disk:
+                bus: virtio
+            interfaces:
+            - name: default
+              bridge: {}
+            rng: {}
+          resources:
+            requests:
+              memory: 16Gi
+        networks:
+        - name: default
+          pod: {}
+        volumes:
+        - name: rootdisk
+          persistentVolumeClaim:
+            claimName: ${PVC_NAME}   # ✔️ Reference the manually cloned PVC
+parameters:
+- name: NAME
+  description: Name of the Virtual Machine
+  required: true
+- name: NAMESPACE
+  description: Namespace to deploy the VM
+  required: true
+- name: PVC_NAME
+  description: Name of the PVC for the root disk (must be manually cloned from golden image)
+  required: true
