@@ -1,0 +1,46 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: windows-vm
+  namespace: windows-vms
+spec:
+  running: false
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: windows-vm
+    spec:
+      domain:
+        cpu:
+          cores: 4
+        memory:
+          guest: 8Gi
+        devices:
+          disks:
+            - name: cdrom
+              cdrom:
+                bus: sata
+              bootOrder: 1
+            - name: rootdisk
+              disk:
+                bus: virtio    # Uses VirtIO block driver
+              bootOrder: 2
+            - name: virtio
+              cdrom:
+                bus: sata
+          interfaces:
+            - name: default
+              bridge: {}
+      networks:
+        - name: default
+          pod: {}
+      volumes:
+        - name: cdrom
+          persistentVolumeClaim:
+            claimName: windows-server-iso
+        - name: rootdisk
+          dataVolume:
+            name: win-rootdisk
+        - name: virtio
+          persistentVolumeClaim:
+            claimName: virtio-drivers
