@@ -48,16 +48,16 @@ Download virtio-win.iso from https://fedorapeople.org/groups/virt/virtio-win/dir
   * Proceed with installation.
 8 Optional Cleanup After Install
   Once Windows is installed:
-  * Shut down VM: '''virtctl stop windows-vm -n windows-vms'''
+  * Shut down VM: ```virtctl stop windows-vm -n windows-vms```
   * Edit VM YAML to remove:
       * cdrom (Windows ISO)
       * virtio (driver ISO)
   This prevents re-attaching on every boot.
 9  Steps to Reinstall(in case of any error):
      Stop the VM: ```virtctl stop windows-vm -n windows-vms```
-     Delete the current root disk (if okay to lose current install): oc delete dv win-rootdisk -n windows-vms
-     Recreate the root disk using the same windows-rootdisk-dv.yaml: oc apply -f windows-rootdisk-dv.yaml 
-     Start the VM again: virtctl start windows-vm -n windows-vms
+     Delete the current root disk (if okay to lose current install): ```oc delete dv win-rootdisk -n windows-vms```
+     Recreate the root disk using the same windows-rootdisk-dv.yaml: ```oc apply -f windows-rootdisk-dv.yaml ```
+     Start the VM again: ```virtctl start windows-vm -n windows-vms```
 
 
 
