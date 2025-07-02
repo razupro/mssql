@@ -105,7 +105,8 @@ spec:
     name: win2-rootdisk
     kind: PersistentVolumeClaim
     apiGroup: ""
-  accessModes:
+volumeMode: Block
+accessModes:
     - ReadWriteOnce
   resources:
     requests:
